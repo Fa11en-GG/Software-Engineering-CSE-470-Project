@@ -8,7 +8,7 @@ A professional full-stack web application developed for **CSE 470**. This projec
 
 * **Full CRUD Operations:** Seamlessly Create, Read, and Delete property listings with real-time database updates.
 * **External API Integration:** Connects to the **ExchangeRate-API** to provide live currency conversion between USD and BDT.
-* **Dual-Layer Validation:** Implements both Frontend (React) and Backend (Mongoose) validation to ensure data integrity (e.g., preventing negative prices).
+* **Dual-Layer Validation:** Implements both Frontend (React) and Backend (Mongoose) validation to ensure data integrity.
 * **Decoupled Architecture:** A clean separation between the Client-side (Vite/React) and the Server-side (Node/Express).
 * **Cloud Persistence:** Hosted data on MongoDB Atlas for persistent storage.
 
@@ -29,6 +29,24 @@ A professional full-stack web application developed for **CSE 470**. This projec
 ## ⚙️ Setup & Installation
 
 ### 1. Backend Setup
-1. Navigate to the backend directory:
-   ```bash
-   cd Backend
+1. Navigate to the backend directory: `cd Backend`
+2. Install dependencies: `npm install`
+3. Configure your `.env` file with your `MONGO_URI`.
+4. Start the server: `node server.js`
+
+### 2. Frontend Setup
+1. Navigate to the frontend directory: `cd Frontend`
+2. Install dependencies: `npm install`
+3. Start the development server: `npm run dev`
+4. Access the app at: `http://localhost:5173`
+
+---
+
+## 👨‍💻 Author Info
+
+**Name:** Raiyan Ahmed  
+**Student ID:** 22301639  
+**Department:** Computer Science and Engineering  
+**University:** BRAC University, Bangladesh  
+
+*Project submitted for CSE 470 (Software Engineering) SEC: 16.*
