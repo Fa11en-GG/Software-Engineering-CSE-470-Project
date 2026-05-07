@@ -1,32 +1,46 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 
-// This component fetches and displays the houses from our backend
-const PropertyList = () => {
-    const [properties, setProperties] = useState([]); // State to store our house list
-
-    // This runs as soon as the page loads
-    useEffect(() => {
-        // We "call" our backend server
-        axios.get('http://localhost:5000/api/properties')
-            .then(response => {
-                setProperties(response.data); // Put the data into our state
-            })
-            .catch(error => console.error("Error fetching properties:", error));
-    }, []);
+const PropertyList = ({ properties }) => {
+    
+    // Function to handle the Delete action
+    const handleDelete = (id) => {
+        if (window.confirm("Are you sure you want to delete this property?")) {
+            axios.delete(`http://localhost:5000/api/properties/${id}`)
+                .then(() => {
+                    alert("Property Deleted!");
+                    window.location.reload(); // Refresh the page to see the updated list
+                })
+                .catch(err => {
+                    console.error("Delete error:", err);
+                    alert("Failed to delete property.");
+                });
+        }
+    };
 
     return (
-        <div>
-            <h2>Available Properties</h2>
-            <div className="property-grid">
-                {properties.map(house => (
-                    <div key={house._id} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px' }}>
-                        <h3>{house.title}</h3>
-                        <p>Price: ${house.price}</p>
-                        <p>{house.location}</p>
-                    </div>
-                ))}
-            </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+            {properties.map((item) => (
+                <div key={item._id} style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '10px', width: '250px' }}>
+                    <h3>{item.title}</h3>
+                    <p><strong>Price:</strong> ${item.price}</p>
+                    <p><strong>Location:</strong> {item.location}</p>
+                    {/* The Delete Button */}
+                    <button 
+                        onClick={() => handleDelete(item._id)} 
+                        style={{ 
+                            backgroundColor: '#e74c3c', 
+                            color: 'white', 
+                            border: 'none', 
+                            padding: '8px 12px', 
+                            borderRadius: '5px', 
+                            cursor: 'pointer' 
+                        }}
+                    >
+                        Delete
+                    </button>
+                </div>
+            ))}
         </div>
     );
 };

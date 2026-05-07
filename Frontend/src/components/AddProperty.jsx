@@ -8,19 +8,23 @@ const AddProperty = () => {
     const [location, setLocation] = useState('');
 
     // 2. This function runs when the "Submit" button is clicked
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Prevents the page from refreshing
+const handleSubmit = (e) => {
+    e.preventDefault();
 
-        const newProperty = { title, price, location };
+    // 1. Basic Frontend Validation
+    if (price <= 0) {
+        return alert("Please enter a valid price greater than 0");
+    }
 
-        // Send the data to our Backend API
-        axios.post('http://localhost:5000/api/properties', newProperty)
-            .then(res => {
-                alert("Property Added!");
-                window.location.reload(); // Refresh to see the new data
-            })
-            .catch(err => console.log(err));
-    };
+    const newProperty = { title, price, location };
+
+    axios.post('http://localhost:5000/api/properties', newProperty)
+        .then(() => {
+            alert("Property Added!");
+            window.location.reload();
+        })
+        .catch(err => alert("Error adding property: " + err.message));
+};
 
     return (
         <div style={{ border: '2px solid blue', padding: '20px', marginBottom: '20px' }}>
