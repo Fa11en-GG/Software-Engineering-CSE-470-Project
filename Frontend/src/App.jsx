@@ -1,55 +1,62 @@
-import { useState, useEffect } from 'react' // Import hooks for state and data
-import axios from 'axios' // Tool to talk to the Backend
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import './App.css'
-import PropertyCard from './components/PropertyCard' // Custom component
-import AddProperty from './components/AddProperty'   // Custom component
+import PropertyList from "./components/PropertyList"
+import AddProperty from './components/AddProperty'
 
 function App() {
-  // 1. STATE: This is where we store the houses from the database
   const [properties, setProperties] = useState([])
+  const [exchangeRate, setExchangeRate] = useState(1)
+  const [currency, setCurrency] = useState('USD') // Toggle state
 
-  // 2. EFFECT: This runs as soon as the website opens
   useEffect(() => {
-    // We request the list of properties from our Backend (Port 5000)
+    // 1. Fetch Internal MERN Data
     axios.get('http://localhost:5000/api/properties')
       .then(response => {
-        setProperties(response.data) // Save the list in our "properties" state
+        setProperties(response.data)
       })
-      .catch(error => {
-        console.error("Error fetching data:", error)
+      .catch(error => console.error("Internal API Error:", error))
+
+    // 2. Fetch External Currency Data (ExchangeRate-API)
+    axios.get('https://open.er-api.com/v6/latest/USD')
+      .then(res => {
+        setExchangeRate(res.data.rates.BDT)
+        console.log("External API: Rates updated successfully")
       })
-  }, []) // The empty [] means "run only once"
+      .catch(error => console.error("External API Error:", error))
+  }, [])
 
   return (
     <div className="main-container">
       <header>
         <h1>Real Estate Management System</h1>
-        <p>Project for CSE 470</p>
+        <p>Project for CSE 470 | Connected to External Exchange API</p>
+        
+        {/* Currency Toggle Button */}
+        <button 
+          onClick={() => setCurrency(currency === 'USD' ? 'BDT' : 'USD')}
+          style={{ padding: '10px', marginTop: '10px', cursor: 'pointer', borderRadius: '5px', backgroundColor: '#3498db', color: 'white', border: 'none' }}
+        >
+          Switch to {currency === 'USD' ? 'BDT' : 'USD'} View
+        </button>
       </header>
 
-      {/* 3. INPUT COMPONENT: The form to add new houses */}
       <section id="add-section">
         <AddProperty />
       </section>
 
-      <div className="ticks"></div>
-
-      {/* 4. DISPLAY SECTION: Mapping through our properties array */}
       <section id="property-list">
-        <h2>Available Properties</h2>
-        <div className="property-grid" style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {properties.length > 0 ? (
-            properties.map((item) => (
-              <PropertyCard key={item._id} property={item} />
-            ))
-          ) : (
-            <p>No properties found in the database. Add one above!</p>
-          )}
-        </div>
+        <h2>Available Properties ({currency})</h2>
+        {properties.length > 0 ? (
+          <PropertyList 
+            properties={properties} 
+            exchangeRate={exchangeRate} 
+            currency={currency} 
+          />
+        ) : (
+          <p>No properties found in the database.</p>
+        )}
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
     </div>
   )
 }
