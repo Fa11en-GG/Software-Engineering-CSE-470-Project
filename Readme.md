@@ -1,6 +1,7 @@
 # Real Estate Management System (MERN Stack)
 
 A professional full-stack web application developed for **CSE 470**. This project serves as a comprehensive demonstration of the MERN (MongoDB, Express, React, Node.js) architecture, featuring a custom REST API and integration with real-time external financial data.
+DEMO LINK: (https://youtu.be/bmYg6r_VxaU)
 
 ---
 
